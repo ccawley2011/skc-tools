@@ -1,0 +1,228 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include <windows.h>
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United Kingdom) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_FORMVIEW DIALOGEX 0, 0, 300, 80
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
+BEGIN
+    CONTROL         "FM Synthesizer",IDC_RADIO_MIDI_FM,"Button",BS_AUTORADIOBUTTON | WS_GROUP,231,50,65,10
+    CONTROL         "General MIDI",IDC_RADIO_MIDI_GM,"Button",BS_AUTORADIOBUTTON,231,62,58,10
+    LTEXT           "B.G.M.",IDC_LABEL_TRACK,7,8,23,8
+    COMBOBOX        IDC_COMBO_TRACKS,35,7,261,324,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_SLIDER_TEMPO,"msctls_trackbar32",TBS_BOTH | WS_DISABLED | WS_TABSTOP,35,20,243,25
+    LTEXT           "Tempo",IDC_LABEL_TEMPO,7,28,22,8
+    PUSHBUTTON      "Play",IDC_BUTTON_PLAY,7,58,50,14,WS_DISABLED
+    PUSHBUTTON      "Pause",IDC_BUTTON_PAUSE,63,58,50,14,WS_DISABLED
+    PUSHBUTTON      "Resume",IDC_BUTTON_RESUME,117,58,50,14,WS_DISABLED
+    PUSHBUTTON      "Stop",IDC_BUTTON_STOP,171,58,50,14,WS_DISABLED
+    RTEXT           "100%",IDC_LABEL_PCT,276,29,20,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_FORMVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 296
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 72
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_FORMVIEW AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080904b0"
+        BEGIN
+            VALUE "CompanyName", "Cameron Cawley"
+            VALUE "FileDescription", "Sonic & Knuckles Collection MIDI Player"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "skc-music-player.exe"
+            VALUE "LegalCopyright", "Copyright (C) 2020 Cameron Cawley"
+            VALUE "OriginalFilename", "skc-music-player.exe"
+            VALUE "ProductName", "Sonic & Knuckles Collection MIDI Player"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x809, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_TITLE               "Sonic & Knuckles Collection MIDI Player\0000"
+    IDS_TRACK_TITLE_S3      "Title (Sonic 3)\0000"
+    IDS_TRACK_AIZ1          "Angel Island Zone Act 1\0000"
+    IDS_TRACK_AIZ2          "Angel Island Zone Act 2\0000"
+    IDS_TRACK_HCZ1          "Hydrocity Zone Act 1\0000"
+    IDS_TRACK_HCZ2          "Hydrocity Zone Act 2\0000"
+    IDS_TRACK_MGZ1          "Marble Garden Zone Act 1\0000"
+    IDS_TRACK_MGZ2          "Marble Garden Zone Act 2\0000"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_TRACK_CNZ1          "Carnival Night Zone Act 1\0000"
+    IDS_TRACK_CNZ2          "Carnival Night Zone Act 2\0000"
+    IDS_TRACK_FBZ1          "Flying Battery Zone Act 1\0000"
+    IDS_TRACK_FBZ2          "Flying Battery Zone Act 2\0000"
+    IDS_TRACK_ICZ1          "Icecap Zone Act 1\0000"
+    IDS_TRACK_ICZ2          "Icecap Zone Act 2\0000"
+    IDS_TRACK_LBZ1          "Launch Base Zone Act 1\0000"
+    IDS_TRACK_LBZ2          "Launch Base Zone Act 2\0000"
+    IDS_TRACK_MHZ1          "Mushroom Hill Zone Act 1\0000"
+    IDS_TRACK_MHZ2          "Mushroom Hill Zone Act 2\0000"
+    IDS_TRACK_SZ1           "Sandopolis Zone Act 1\0000"
+    IDS_TRACK_SZ2           "Sandopolis Zone Act 2\0000"
+    IDS_TRACK_LRZ1          "Lava Reef Zone Act 1\0000"
+    IDS_TRACK_LRZ2          "Lava Reef Zone Act 2\0000"
+    IDS_TRACK_SSZ           "Sky Sanctuary Zone\0000"
+    IDS_TRACK_DEZ1          "Death Egg Zone Act 1\0000"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_TRACK_DEZ2          "Death Egg Zone Act 2\0000"
+    IDS_TRACK_MINIBOSS      "Act 1 Boss\0000"
+    IDS_TRACK_BOSS          "Act 2 Boss\0000"
+    IDS_TRACK_DDZ           "The Doomsday Zone\0000"
+    IDS_TRACK_BONUS_ORBS    "Bonus Stage: Magnetic Orbs\0000"
+    IDS_TRACK_SPECIAL_STAGE "Special Stage\0000"
+    IDS_TRACK_BONUS_SLOTS   "Bonus Stage: Slot Machine\0000"
+    IDS_TRACK_BONUS_GUMBALL "Bonus Stage: Gumball Machine\0000"
+    IDS_TRACK_KNUCKLES_S3   "Knuckles' Theme (Sonic 3)\0000"
+    IDS_TRACK_ALZ           "Azure Lake Zone\0000"
+    IDS_TRACK_BPZ           "Balloon Park Zone\0000"
+    IDS_TRACK_DPZ           "Desert Palace Zone\0000"
+    IDS_TRACK_CGZ           "Chrome Gadget Zone\0000"
+    IDS_TRACK_EMZ           "Endless Mine Zone\0000"
+    IDS_TRACK_GAMEOVER      "Game Over\0000"
+    IDS_TRACK_CONTINUE      "Continue/Competition Results\0000"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_TRACK_ACTCLEAR      "Act Clear\0000"
+    IDS_TRACK_1UP_S3        "1-Up (Sonic 3)\0000"
+    IDS_TRACK_EMERALD       "Chaos Emerald\0000"
+    IDS_TRACK_INVINCIBILITY_S3 "Invincibility/Super Theme (Sonic 3)\0000"
+    IDS_TRACK_COMPETITION   "Competition\0000"
+    IDS_TRACK_UNUSED        "Unused Track\0000"
+    IDS_TRACK_DATA_SELECT   "Data Select\0000"
+    IDS_TRACK_FINAL_BOSS    "Final Boss\0000"
+    IDS_TRACK_DROWNING      "Drowning\0000"
+    IDS_TRACK_ALLCLEAR_S3   "All Clear (Sonic 3)\0000"
+    IDS_TRACK_STAFF_S3      "Staff Roll (Sonic 3)\0000"
+    IDS_TRACK_KNUCKLES_SK   "Knuckles' Theme (Sonic and Knuckles)\0000"
+    IDS_TRACK_TITLE_SK      "Title (Sonic and Knuckles)\0000"
+    IDS_TRACK_1UP_SK        "1-Up (Sonic and Knuckles)\0000"
+    IDS_TRACK_INVINCIBILITY_SK "Invincibility (Sonic and Knuckles)\0000"
+    IDS_TRACK_ALLCLEAR_SK   "All Clear (Sonic and Knuckles)\0000"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_TRACK_STAFF_SK      "Staff Roll (Sonic and Knuckles)\0000"
+    IDS_INIT_ERROR          "Failed to initialize application\0000"
+    IDS_LOAD_ERROR          "Failed to load MIDI DLL\0000"
+    IDS_PLAY_FAILED         "Failed to play song\0000"
+    IDS_PAUSE_FAILED        "Failed to pause song\0000"
+    IDS_RESUME_FAILED       "Failed to resume song\0000"
+    IDS_STOP_FAILED         "Failed to stop song\0000"
+    IDS_FM_SWITCH_FAILED    "Failed to switch to FM Synthesizer\0000"
+    IDS_GM_SWITCH_FAILED    "Failed to switch to General MIDI\0000"
+END
+
+#endif    // English (United Kingdom) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
