@@ -243,7 +243,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
 	if (lpCmdLine && lpCmdLine[0]) {
 		// TODO: Do this properly!
-		if (!dll.load(hWnd, lpCmdLine)) {
+		if (!dll.load(hDlg, lpCmdLine)) {
 			return MessageBoxFromTableWithError(hDlg, IDS_LOAD_ERROR, IDS_TITLE, MB_ICONERROR, hInstance);
 		}
 	} else {
@@ -251,7 +251,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		if (!OpenFileDialog(hDlg, dllName, sizeof(dllName), TEXT("Dynamic Link Library(*.dll)\0*.dll\0")))
 			return 0;
 
-		if (!dll.load(hWnd, dllName)) {
+		if (!dll.load(hDlg, dllName)) {
 			return MessageBoxFromTableWithError(hDlg, IDS_LOAD_ERROR, IDS_TITLE, MB_ICONERROR, hInstance);
 		}
 	}
