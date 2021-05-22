@@ -14,5 +14,6 @@ add_executable(skc-music-player WIN32
 if (MSVC)
 	target_compile_definitions(skc-music-player PRIVATE _UNICODE)
 elseif (MINGW)
-	target_link_options(skc-music-player PRIVATE -static-libgcc -static-libstdc++)
+	target_compile_options(skc-music-player PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions -fno-rtti>)
+	target_link_options(skc-music-player PRIVATE -static-libgcc)
 endif ()
