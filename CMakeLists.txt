@@ -6,20 +6,22 @@ add_executable(skc2smf
 	Convert.c
 	Convert.h)
 
-add_executable(skc-music-player WIN32
-	main.cpp
-	MidiDLL.cpp
-	MidiDLL.hpp
-	MidiInterface.hpp
-	WinMsg.c
-	WinMsg.h
-	resource.rc
-	resource.h)
+if (WIN32)
+	add_executable(skc-music-player WIN32
+		main.cpp
+		MidiDLL.cpp
+		MidiDLL.hpp
+		MidiInterface.hpp
+		WinMsg.c
+		WinMsg.h
+		resource.rc
+		resource.h)
 
-if (MSVC)
-	target_compile_definitions(skc2smf PRIVATE _UNICODE _CRT_SECURE_NO_WARNINGS)
-	target_compile_definitions(skc-music-player PRIVATE _UNICODE)
-elseif (MINGW)
-	target_compile_options(skc-music-player PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions -fno-rtti>)
-	target_link_options(skc-music-player PRIVATE -static-libgcc)
+	if (MSVC)
+		target_compile_definitions(skc2smf PRIVATE _UNICODE _CRT_SECURE_NO_WARNINGS)
+		target_compile_definitions(skc-music-player PRIVATE _UNICODE)
+	elseif (MINGW)
+		target_compile_options(skc-music-player PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions -fno-rtti>)
+		target_link_options(skc-music-player PRIVATE -static-libgcc)
+	endif ()
 endif ()

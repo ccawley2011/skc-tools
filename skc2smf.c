@@ -1,8 +1,11 @@
 #include "Convert.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _WIN32
 #include <io.h>
 #include <tchar.h>
 
@@ -14,6 +17,28 @@
 #define _tcserror strerror
 #endif
 #endif
+
+#else
+#include <sys/stat.h>
+
+typedef char TCHAR;
+#define _T(x) (x)
+
+#define _tmain main
+#define _ftprintf fprintf
+#define _tfopen fopen
+#define _tcserror strerror
+#endif
+
+static size_t fsize(FILE *fp) {
+#ifdef _WIN32
+	return _filelength(_fileno(ifp));
+#else
+	struct stat st;
+	fstat(fileno(fp), &st);
+	return st.st_size;
+#endif
+}
 
 int _tmain(int argc, TCHAR **argv) {
 	FILE *ifp, *ofp;
@@ -32,7 +57,7 @@ int _tmain(int argc, TCHAR **argv) {
 
 	ifp = _tfopen(infile, _T("rb"));
 	if (ifp) {
-		isize = _filelength(_fileno(ifp));
+		isize = fsize(ifp);
 		in = malloc(isize);
 		if (!in) {
 			_ftprintf(stderr, _T("Out of memory\n"));
