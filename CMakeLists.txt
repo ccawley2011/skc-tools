@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
 project(skc-tools)
 
+add_executable(skc2smf
+	skc2smf.c
+	Convert.c
+	Convert.h)
+
 add_executable(skc-music-player WIN32
 	main.cpp
 	MidiDLL.cpp
@@ -12,6 +17,7 @@ add_executable(skc-music-player WIN32
 	resource.h)
 
 if (MSVC)
+	target_compile_definitions(skc2smf PRIVATE _UNICODE _CRT_SECURE_NO_WARNINGS)
 	target_compile_definitions(skc-music-player PRIVATE _UNICODE)
 elseif (MINGW)
 	target_compile_options(skc-music-player PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions -fno-rtti>)
