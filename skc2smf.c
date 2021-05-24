@@ -32,7 +32,7 @@ typedef char TCHAR;
 
 static size_t fsize(FILE *fp) {
 #ifdef _WIN32
-	return _filelength(_fileno(ifp));
+	return _filelength(_fileno(fp));
 #else
 	struct stat st;
 	fstat(fileno(fp), &st);
