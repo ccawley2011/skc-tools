@@ -25,6 +25,14 @@ BOOL OpenFileDialog(HWND hWnd, LPTSTR lpstrFile, DWORD nMaxFile, LPCTSTR lpstrFi
 }
 
 void SetButtonState(HWND hDlg, BOOL play, BOOL pause, BOOL resume, BOOL stop, BOOL tempo) {
+	HWND hWnd = (HWND)GetWindowLongPtr(hDlg, GWLP_HWNDPARENT);
+	HMENU hMenu = GetMenu(hWnd);
+
+	EnableMenuItem(hMenu, ID_PLAYBACK_PLAY, play ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
+	EnableMenuItem(hMenu, ID_PLAYBACK_PAUSE, pause ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
+	EnableMenuItem(hMenu, ID_PLAYBACK_RESUME, resume ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
+	EnableMenuItem(hMenu, ID_PLAYBACK_STOP, stop ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
+
 	EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_PLAY), play);
 	EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_PAUSE), pause);
 	EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_RESUME), resume);
@@ -54,6 +62,7 @@ INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 	switch (LOWORD(wParam)) {
 	case IDC_BUTTON_PLAY:
+	case ID_PLAYBACK_PLAY:
 		if (!dll->playSong())
 			MessageBoxFromTable(hDlg, IDS_PLAY_FAILED, IDS_TITLE, MB_ICONWARNING, hInstance);
 		else
@@ -61,6 +70,7 @@ INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return TRUE;
 
 	case IDC_BUTTON_PAUSE:
+	case ID_PLAYBACK_PAUSE:
 		if (!dll->pauseSong())
 			MessageBoxFromTable(hDlg, IDS_PAUSE_FAILED, IDS_TITLE, MB_ICONWARNING, hInstance);
 		else
@@ -68,6 +78,7 @@ INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return TRUE;
 
 	case IDC_BUTTON_RESUME:
+	case ID_PLAYBACK_RESUME:
 		if (!dll->resumeSong())
 			MessageBoxFromTable(hDlg, IDS_RESUME_FAILED, IDS_TITLE, MB_ICONWARNING, hInstance);
 		else
@@ -75,6 +86,7 @@ INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return TRUE;
 
 	case IDC_BUTTON_STOP:
+	case ID_PLAYBACK_STOP:
 		if (!dll->stopSong())
 			MessageBoxFromTable(hDlg, IDS_STOP_FAILED, IDS_TITLE, MB_ICONWARNING, hInstance);
 		else
@@ -186,6 +198,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+
+	case WM_COMMAND: {
+		HWND hDlg = (HWND)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+		return CommandEvent(hDlg, uMsg, wParam, lParam);
+	}
+
 	case WM_ERASEBKGND: {
 		HBRUSH hbr = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
 		HDC hdc = (HDC)wParam;
@@ -219,16 +237,23 @@ BOOL CreateMainWindow(HINSTANCE hInstance, HWND *hWnd, HWND *hDlg) {
 	if (!*hWnd)
 		return FALSE;
 
+	HMENU hMenubar = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU1));
+	SetMenu(*hWnd, hMenubar);
+
 	*hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_FORMVIEW), *hWnd, DialogProc);
 	if (!*hDlg)
 		return FALSE;
+
+	SetWindowLongPtr(*hWnd, GWLP_USERDATA, (LONG_PTR)*hDlg);
 
 	RECT wndRect, dlgRect;
 	GetWindowRect(*hWnd, &wndRect);
 	GetClientRect(*hDlg, &dlgRect);
 	AdjustWindowRect(&dlgRect, GetWindowLong(*hWnd, GWL_STYLE), FALSE);
-	SetWindowPos(*hWnd, HWND_TOP, wndRect.left, wndRect.top,
-		dlgRect.right - dlgRect.left, dlgRect.bottom - dlgRect.top, 0);
+
+	int cx = (dlgRect.right - dlgRect.left);
+	int cy = (dlgRect.bottom - dlgRect.top) + GetSystemMetrics(SM_CYMENU);
+	SetWindowPos(*hWnd, HWND_TOP, wndRect.left, wndRect.top, cx, cy, 0);
 
 	return TRUE;
 }

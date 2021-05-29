@@ -4,6 +4,7 @@
 //
 #define IDD_FORMVIEW                    101
 #define IDI_ICON1                       103
+#define IDR_MENU1                       107
 #define IDS_TITLE                       200
 #define IDS_TRACK_TITLE_S3              201
 #define IDS_TRACK_AIZ1                  202
@@ -82,13 +83,18 @@
 #define IDC_BUTTON_PAUSE                1012
 #define IDC_BUTTON_RESUME               1013
 #define IDC_BUTTON_STOP                 1014
+#define ID_FILE_EXIT                    40001
+#define ID_PLAYBACK_PLAY                40003
+#define ID_PLAYBACK_PAUSE               40004
+#define ID_PLAYBACK_RESUME              40005
+#define ID_PLAYBACK_STOP                40006
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        106
-#define _APS_NEXT_COMMAND_VALUE         40001
+#define _APS_NEXT_RESOURCE_VALUE        108
+#define _APS_NEXT_COMMAND_VALUE         40007
 #define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

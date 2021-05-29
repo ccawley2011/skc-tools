@@ -21,6 +21,27 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Menu
+//
+
+IDR_MENU1 MENU
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Exit",                        ID_FILE_EXIT
+    END
+    POPUP "Playback"
+    BEGIN
+        MENUITEM "Play",                        ID_PLAYBACK_PLAY, GRAYED
+        MENUITEM "Pause",                       ID_PLAYBACK_PAUSE, GRAYED
+        MENUITEM "Resume",                      ID_PLAYBACK_RESUME, GRAYED
+        MENUITEM "Stop",                        ID_PLAYBACK_STOP, GRAYED
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Dialog
 //
 
