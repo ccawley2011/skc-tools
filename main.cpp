@@ -226,7 +226,7 @@ BOOL CreateMainWindow(HINSTANCE hInstance, HWND *hWnd, HWND *hDlg) {
 	RECT wndRect, dlgRect;
 	GetWindowRect(*hWnd, &wndRect);
 	GetClientRect(*hDlg, &dlgRect);
-	AdjustWindowRect(&dlgRect, WS_OVERLAPPEDWINDOW, FALSE);
+	AdjustWindowRect(&dlgRect, GetWindowLong(*hWnd, GWL_STYLE), FALSE);
 	SetWindowPos(*hWnd, HWND_TOP, wndRect.left, wndRect.top,
 		dlgRect.right - dlgRect.left, dlgRect.bottom - dlgRect.top, 0);
 
