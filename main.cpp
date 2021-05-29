@@ -248,8 +248,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		}
 	} else {
 		TCHAR dllName[260];
-		if (!OpenFileDialog(hDlg, dllName, sizeof(dllName), TEXT("Dynamic Link Library(*.dll)\0*.dll\0")))
+		if (!OpenFileDialog(hDlg, dllName, sizeof(dllName), TEXT("Dynamic Link Library(*.dll)\0*.dll\0"))) {
+			DWORD error = CommDlgExtendedError();
+			if (error != 0) {
+				return MessageBoxFromTableWithCommDlgError(hDlg, IDS_OFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance);
+			}
 			return 0;
+		}
 
 		if (!dll.load(hDlg, dllName)) {
 			return MessageBoxFromTableWithError(hDlg, IDS_LOAD_ERROR, IDS_TITLE, MB_ICONERROR, hInstance);

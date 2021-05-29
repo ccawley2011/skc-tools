@@ -70,6 +70,7 @@
 #define IDS_STOP_FAILED                 262
 #define IDS_FM_SWITCH_FAILED            263
 #define IDS_GM_SWITCH_FAILED            264
+#define IDS_OFN_DIALOG_FAILED           265
 #define IDC_LABEL_TRACK                 1004
 #define IDC_LABEL_TEMPO                 1005
 #define IDC_LABEL_PCT                   1006

@@ -52,3 +52,56 @@ DWORD MessageBoxFromTableWithError(HWND hWnd, UINT uTextID, UINT uCaptionID, UIN
 
 	return dw;
 }
+
+DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance) {
+	DWORD dw = CommDlgExtendedError();
+
+	LPCTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
+	LPCTSTR lpErrorString = GetCommDlgErrorMessage(dw);
+	LPTSTR lpDisplayBuf = GetFormattedMessage(TEXT("%1: %2"), lpMessage, lpErrorString);
+
+	MessageBox(hWnd, lpDisplayBuf, GetStringFromTable(hInstance, uCaptionID), uType);
+
+	LocalFree(lpDisplayBuf);
+
+	return dw;
+}
+
+LPCTSTR GetCommDlgErrorMessage(DWORD dwError) {
+	switch (dwError) {
+#define X(err) case err: return _T(#err)
+	X(CDERR_DIALOGFAILURE);
+	X(CDERR_FINDRESFAILURE);
+	X(CDERR_INITIALIZATION);
+	X(CDERR_LOADRESFAILURE);
+	X(CDERR_LOADSTRFAILURE);
+	X(CDERR_LOCKRESFAILURE);
+	X(CDERR_MEMALLOCFAILURE);
+	X(CDERR_MEMLOCKFAILURE);
+	X(CDERR_NOHINSTANCE);
+	X(CDERR_NOHOOK);
+	X(CDERR_NOTEMPLATE);
+	X(CDERR_REGISTERMSGFAIL);
+	X(CDERR_STRUCTSIZE);
+	X(PDERR_CREATEICFAILURE);
+	X(PDERR_DEFAULTDIFFERENT);
+	X(PDERR_DNDMMISMATCH);
+	X(PDERR_GETDEVMODEFAIL);
+	X(PDERR_INITFAILURE);
+	X(PDERR_LOADDRVFAILURE);
+	X(PDERR_NODEFAULTPRN);
+	X(PDERR_NODEVICES);
+	X(PDERR_PARSEFAILURE);
+	X(PDERR_PRINTERNOTFOUND);
+	X(PDERR_RETDEFFAILURE);
+	X(PDERR_SETUPFAILURE);
+	X(CFERR_MAXLESSTHANMIN);
+	X(CFERR_NOFONTS);
+	X(FNERR_BUFFERTOOSMALL);
+	X(FNERR_INVALIDFILENAME);
+	X(FNERR_SUBCLASSFAILURE);
+	X(FRERR_BUFFERLENGTHZERO);
+#undef X
+	default: return _T("unknown error code");
+	}
+}

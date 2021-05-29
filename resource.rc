@@ -209,6 +209,7 @@ BEGIN
     IDS_STOP_FAILED         "Failed to stop song\0000"
     IDS_FM_SWITCH_FAILED    "Failed to switch to FM Synthesizer\0000"
     IDS_GM_SWITCH_FAILED    "Failed to switch to General MIDI\0000"
+    IDS_OFN_DIALOG_FAILED   "Failed to launch Open File Dialog\0000"
 END
 
 #endif    // English (United Kingdom) resources
