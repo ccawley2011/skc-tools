@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(skc-tools)
+project(skc-tools LANGUAGES C)
 
 add_executable(skc2smf
 	skc2smf.c
@@ -7,6 +7,8 @@ add_executable(skc2smf
 	Convert.h)
 
 if (WIN32)
+	enable_language(CXX RC)
+
 	add_executable(skc-music-player WIN32
 		main.cpp
 		MidiDLL.cpp

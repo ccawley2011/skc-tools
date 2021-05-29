@@ -9,10 +9,10 @@
 
 static unsigned long ReadLE32(const unsigned char *src, size_t pos) {
 	unsigned long val = 0;
-	val |= src[pos + 0];
-	val |= src[pos + 1] << 8;
-	val |= src[pos + 2] << 16;
-	val |= src[pos + 3] << 24;
+	val |= (long)src[pos + 0];
+	val |= (long)src[pos + 1] << 8;
+	val |= (long)src[pos + 2] << 16;
+	val |= (long)src[pos + 3] << 24;
 	return val;
 }
 

@@ -19,16 +19,16 @@ LPTSTR GetErrorMessage(DWORD dwMessageId, DWORD dwLanguageId) {
 
 LPTSTR GetFormattedMessageV(LPCTSTR pMessage, va_list args) {
 	LPTSTR pBuffer = NULL;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING, pMessage, 0, 0, (LPTSTR)&pBuffer, 0, &args);
+	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING, pMessage, 0, 0, (LPTSTR)&pBuffer, 0, (va_list *)&args);
 	return pBuffer;
 }
 
 LPTSTR GetFormattedMessage(LPCTSTR pMessage, ...) {
-	va_list args = NULL;
+	LPTSTR pBuffer;
+	va_list args;
+
 	va_start(args, pMessage);
-
-	LPTSTR pBuffer = GetFormattedMessageV(pMessage, args);
-
+	pBuffer = GetFormattedMessageV(pMessage, args);
 	va_end(args);
 
 	return pBuffer;
