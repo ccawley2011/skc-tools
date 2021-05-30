@@ -72,6 +72,8 @@
 #define IDS_FM_SWITCH_FAILED            263
 #define IDS_GM_SWITCH_FAILED            264
 #define IDS_OFN_DIALOG_FAILED           265
+#define IDS_SFN_DIALOG_FAILED           266
+#define IDS_SAVE_ERROR                  267
 #define IDC_LABEL_TRACK                 1004
 #define IDC_LABEL_TEMPO                 1005
 #define IDC_LABEL_PCT                   1006
@@ -83,7 +85,8 @@
 #define IDC_BUTTON_PAUSE                1012
 #define IDC_BUTTON_RESUME               1013
 #define IDC_BUTTON_STOP                 1014
-#define ID_FILE_EXIT                    40001
+#define ID_FILE_SAVE                    40001
+#define ID_FILE_EXIT                    40002
 #define ID_PLAYBACK_PLAY                40003
 #define ID_PLAYBACK_PAUSE               40004
 #define ID_PLAYBACK_RESUME              40005

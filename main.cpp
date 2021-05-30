@@ -7,7 +7,7 @@
 #include "WinMsg.h"
 #include "resource.h"
 
-BOOL OpenFileDialog(HWND hWnd, LPTSTR lpstrFile, DWORD nMaxFile, LPCTSTR lpstrFilter) {
+BOOL OpenFileDialog(HWND hWnd, LPTSTR lpstrFile, DWORD nMaxFile, LPCTSTR lpstrFilter, LPCTSTR lpstrDefExt, BOOL save) {
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
@@ -20,14 +20,22 @@ BOOL OpenFileDialog(HWND hWnd, LPTSTR lpstrFile, DWORD nMaxFile, LPCTSTR lpstrFi
 	ofn.lpstrFileTitle = NULL;
 	ofn.nMaxFileTitle = 0;
 	ofn.lpstrInitialDir = NULL;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-	return GetOpenFileName(&ofn);
+	ofn.Flags = OFN_PATHMUSTEXIST;
+	ofn.lpstrDefExt = lpstrDefExt;
+
+	if (save) {
+		return GetSaveFileName(&ofn);
+	} else {
+		ofn.Flags |= OFN_FILEMUSTEXIST;
+		return GetOpenFileName(&ofn);
+	}
 }
 
 void SetButtonState(HWND hDlg, BOOL play, BOOL pause, BOOL resume, BOOL stop, BOOL tempo) {
 	HWND hWnd = (HWND)GetWindowLongPtr(hDlg, GWLP_HWNDPARENT);
 	HMENU hMenu = GetMenu(hWnd);
 
+	EnableMenuItem(hMenu, ID_FILE_SAVE, play ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hMenu, ID_PLAYBACK_PLAY, play ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hMenu, ID_PLAYBACK_PAUSE, pause ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hMenu, ID_PLAYBACK_RESUME, resume ? MF_ENABLED : MF_DISABLED | MF_GRAYED);
@@ -130,6 +138,20 @@ INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			SendMessage(GetDlgItem(hDlg, IDC_LABEL_PCT), WM_SETTEXT, 0, (LPARAM)TEXT("100%"));
 		}
 		return TRUE;
+
+	case ID_FILE_SAVE: {
+		TCHAR fileName[260];
+		if (!OpenFileDialog(hDlg, fileName, sizeof(fileName), TEXT("Standard MIDI File (*.mid)\0*.mid\0"), TEXT("mid"), TRUE)) {
+			DWORD error = CommDlgExtendedError();
+			if (error != 0) {
+				MessageBoxFromTableWithCommDlgError(hDlg, IDS_SFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance);
+			}
+		} else {
+			if (!dll->save(fileName))
+				MessageBoxFromTable(hDlg, IDS_SAVE_ERROR, IDS_TITLE, MB_ICONWARNING, hInstance);
+		}
+		return TRUE;
+	}
 	}
 
 	return FALSE;
@@ -273,7 +295,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		}
 	} else {
 		TCHAR dllName[260];
-		if (!OpenFileDialog(hDlg, dllName, sizeof(dllName), TEXT("Dynamic Link Library(*.dll)\0*.dll\0"))) {
+		if (!OpenFileDialog(hDlg, dllName, sizeof(dllName), TEXT("Dynamic Link Library (*.dll)\0*.dll\0"), TEXT("dll"), FALSE)) {
 			DWORD error = CommDlgExtendedError();
 			if (error != 0) {
 				return MessageBoxFromTableWithCommDlgError(hDlg, IDS_OFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance);

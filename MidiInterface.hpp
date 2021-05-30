@@ -81,7 +81,9 @@ enum {
 	TRACK_1UP_SK           = 53,
 	TRACK_INVINCIBILITY_SK = 54,
 	TRACK_ALLCLEAR_SK      = 55,
-	TRACK_STAFF_SK         = 56
+	TRACK_STAFF_SK         = 56,
+
+	TRACK_LAST = TRACK_STAFF_SK
 };
 
 class MidiInterface {

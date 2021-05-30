@@ -28,6 +28,7 @@ IDR_MENU1 MENU
 BEGIN
     POPUP "File"
     BEGIN
+        MENUITEM "Save",                        ID_FILE_SAVE, GRAYED
         MENUITEM "Exit",                        ID_FILE_EXIT
     END
     POPUP "Playback"
@@ -231,6 +232,8 @@ BEGIN
     IDS_FM_SWITCH_FAILED    "Failed to switch to FM Synthesizer\0000"
     IDS_GM_SWITCH_FAILED    "Failed to switch to General MIDI\0000"
     IDS_OFN_DIALOG_FAILED   "Failed to launch Open File Dialog\0000"
+    IDS_SFN_DIALOG_FAILED   "Failed to launch Save File Dialog\0000"
+    IDS_SAVE_ERROR          "Failed to save MIDI file\0000"
 END
 
 #endif    // English (United Kingdom) resources

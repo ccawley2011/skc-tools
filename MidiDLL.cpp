@@ -1,5 +1,6 @@
 #include "MidiDLL.hpp"
 #include "MidiInterface.hpp"
+#include "Convert.h"
 
 MidiDLL::MidiDLL() :
 	_module(NULL),
@@ -115,4 +116,91 @@ BOOL MidiDLL::setMode(unsigned int bgmmode) {
 
 BOOL MidiDLL::isReady() {
 	return _midi && (_id > 0);
+}
+
+BOOL MidiDLL::save(LPCTSTR filename, int loopCtrl, int totalLoopCnt) {
+	HANDLE hFile = CreateFile(filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE) {
+		return FALSE;
+	}
+
+	BOOL bErrorFlag = save(hFile, loopCtrl, totalLoopCnt);
+
+	CloseHandle(hFile);
+
+	return bErrorFlag;
+}
+
+BOOL MidiDLL::save(HANDLE hFile, int loopCtrl, int totalLoopCnt) {
+	size_t isize, dsize, osize;
+	LPVOID in, decmp, out;
+	HRSRC resource;
+	HGLOBAL handle;
+	BOOL bErrorFlag;
+
+	if (!_module)
+		return FALSE;
+
+	int resNum = _id + (_mode * TRACK_LAST);
+
+	resource = FindResource(_module, MAKEINTRESOURCE(resNum), _T("CMP"));
+	if (!resource)
+		return FALSE;
+
+	isize = SizeofResource(_module, resource);
+	if (!isize)
+		return FALSE;
+
+	handle = LoadResource(_module, resource);
+	if (!handle)
+		return FALSE;
+
+	in = LockResource(handle);
+	if (!in) {
+		FreeResource(handle);
+		return FALSE;
+	}
+
+	bErrorFlag = DecompressData(in, isize, decmp, dsize);
+	FreeResource(handle);
+	if (!bErrorFlag)
+		return FALSE;
+
+	bErrorFlag = BIN2MID(decmp, dsize, out, osize, loopCtrl, totalLoopCnt);
+	HeapFree(GetProcessHeap(), 0, decmp);
+	if (!bErrorFlag)
+		return FALSE;
+
+	bErrorFlag = WriteFile(hFile, out, osize);
+	HeapFree(GetProcessHeap(), 0, out);
+	return bErrorFlag;
+}
+
+BOOL MidiDLL::DecompressData(const void* src, size_t srcSize, void*& dst, size_t& dstSize) {
+	dstSize = ::DecompressData(src, srcSize, NULL);
+	dst = HeapAlloc(GetProcessHeap(), 0, dstSize);
+	if (!dst)
+		return FALSE;
+	dstSize = ::DecompressData(src, srcSize, dst);
+	return TRUE;
+}
+
+BOOL MidiDLL::BIN2MID(const void* src, size_t srcSize, void*& dst, size_t& dstSize, int loopCtrl, int totalLoopCnt) {
+	dstSize = ::BIN2MID(src, srcSize, NULL, loopCtrl, totalLoopCnt);
+	dst = HeapAlloc(GetProcessHeap(), 0, dstSize);
+	if (!dst)
+		return FALSE;
+	dstSize = ::BIN2MID(src, srcSize, dst, loopCtrl, totalLoopCnt);
+	return TRUE;
+}
+
+BOOL MidiDLL::WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite) {
+	DWORD dwBytesWritten;
+	if (!::WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, &dwBytesWritten, NULL))
+		return FALSE;
+
+	if (dwBytesWritten != nNumberOfBytesToWrite)
+		return FALSE;
+
+	return TRUE;
 }

@@ -11,6 +11,8 @@ if (WIN32)
 
 	add_executable(skc-music-player WIN32
 		main.cpp
+		Convert.c
+		Convert.h
 		MidiDLL.cpp
 		MidiDLL.hpp
 		MidiInterface.hpp
