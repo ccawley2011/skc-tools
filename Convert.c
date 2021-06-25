@@ -22,10 +22,10 @@ static void WriteBE16(unsigned char *dst, size_t pos, unsigned short val) {
 }
 
 static void WriteBE32(unsigned char *dst, size_t pos, unsigned long val) {
-	dst[pos + 0] = (val >> 24) & 0xFF;
-	dst[pos + 1] = (val >> 16) & 0xFF;
-	dst[pos + 2] = (val >>  8) & 0xFF;
-	dst[pos + 3] = (val >>  0) & 0xFF;
+	dst[pos + 0] = (unsigned char)((val >> 24) & 0xFF);
+	dst[pos + 1] = (unsigned char)((val >> 16) & 0xFF);
+	dst[pos + 2] = (unsigned char)((val >>  8) & 0xFF);
+	dst[pos + 3] = (unsigned char)((val >>  0) & 0xFF);
 }
 
 static size_t WriteMIDIValue(unsigned char *FileData, size_t Pos, unsigned long Value) {
@@ -44,12 +44,12 @@ static size_t WriteMIDIValue(unsigned char *FileData, size_t Pos, unsigned long 
 
 	TempLng = Value;
 	CurPos = Pos + (ByteCount - 1);
-	FileData[CurPos] = 0 | (TempLng & 0x7F);
+	FileData[CurPos] = 0 | (unsigned char)(TempLng & 0x7F);
 	TempLng = TempLng >> 7;
 
 	while (TempLng) {
 		CurPos = CurPos - 1;
-		FileData[CurPos] = 0x80 | (TempLng & 0x7F);
+		FileData[CurPos] = 0x80 | (unsigned char)(TempLng & 0x7F);
 		TempLng = TempLng >> 7;
 	}
 

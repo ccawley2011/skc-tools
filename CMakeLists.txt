@@ -22,7 +22,7 @@ if (WIN32)
 		resource.h)
 
 	if (MSVC)
-		target_compile_definitions(skc2smf PRIVATE _UNICODE _CRT_SECURE_NO_WARNINGS)
+		target_compile_definitions(skc2smf PRIVATE _UNICODE _CRT_SECURE_NO_DEPRECATE)
 		target_compile_definitions(skc-music-player PRIVATE _UNICODE)
 	elseif (MINGW)
 		target_compile_definitions(skc-music-player PRIVATE _WIN32_WINNT=0x0400)
