@@ -30,6 +30,12 @@ typedef char TCHAR;
 #define _tcserror strerror
 #endif
 
+#if defined(_WIN32) && !defined(__USE_MINGW_ANSI_STDIO)
+#define PRIsizet "Iu"
+#else
+#define PRIsizet "zu"
+#endif
+
 static size_t fsize(FILE *fp) {
 #ifdef _WIN32
 	return _filelength(_fileno(fp));
@@ -66,7 +72,7 @@ int _tmain(int argc, TCHAR **argv) {
 		}
 
 		if (fread(in, isize, 1, ifp) != 1) {
-			_ftprintf(stderr, _T("Failed to read %d bytes from %s\n"), isize, ifp);
+			_ftprintf(stderr, _T("Failed to read %" PRIsizet " bytes from %s\n"), isize, infile);
 			fclose(ifp);
 			return EXIT_FAILURE;
 		}
