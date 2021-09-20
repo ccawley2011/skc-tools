@@ -72,7 +72,7 @@ int _tmain(int argc, TCHAR **argv) {
 		}
 
 		if (fread(in, isize, 1, ifp) != 1) {
-			_ftprintf(stderr, _T("Failed to read %" PRIsizet " bytes from %s\n"), isize, infile);
+			_ftprintf(stderr, _T("Failed to read %") _T(PRIsizet) _T(" bytes from %s\n"), isize, infile);
 			fclose(ifp);
 			return EXIT_FAILURE;
 		}
