@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 
 typedef char TCHAR;
-#define _T(x) (x)
+#define _T(x) x
 
 #define _tmain main
 #define _ftprintf fprintf
