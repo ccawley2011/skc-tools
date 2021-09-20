@@ -1,0 +1,26 @@
+name: CMake
+
+on: [push, pull_request] 
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    name: ${{matrix.platform.name}}
+    runs-on: ${{matrix.platform.os}}
+    strategy:
+      matrix:
+        platform:
+        - { name: Windows (MSVC), os: windows-latest, flags: -A Win32 }
+        - { name: Linux,   os: ubuntu-latest }
+        - { name: MacOS,   os: macos-latest }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{matrix.platform.flags}}
+
+    - name: Build
+      run: cmake --build build --config ${{env.BUILD_TYPE}}
