@@ -10,7 +10,11 @@
 BOOL OpenFileDialog(HWND hWnd, LPTSTR lpstrFile, DWORD nMaxFile, LPCTSTR lpstrFilter, LPCTSTR lpstrDefExt, BOOL save) {
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof(ofn));
+#ifdef OPENFILENAME_SIZE_VERSION_400
+	ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
+#else
 	ofn.lStructSize = sizeof(ofn);
+#endif
 	ofn.hwndOwner = hWnd;
 	ofn.lpstrFile = lpstrFile;
 	ofn.lpstrFile[0] = 0;
