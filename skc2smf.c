@@ -65,7 +65,12 @@ int _tmain(int argc, TCHAR **argv) {
 			return EXIT_FAILURE;
 		}
 
-		fread(in, isize, 1, ifp);
+		if (fread(in, isize, 1, ifp) != 1) {
+			_ftprintf(stderr, _T("Failed to read %d bytes from %s\n"), isize, ifp);
+			fclose(ifp);
+			return EXIT_FAILURE;
+		}
+
 		fclose(ifp);
 	} else {
 		_ftprintf(stderr, _T("Failed to open %s for reading: %s\n"), infile, _tcserror(errno));
