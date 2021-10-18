@@ -56,7 +56,9 @@ INT_PTR InitDialogEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE);
 	HWND hComboBox = GetDlgItem(hDlg, IDC_COMBO_TRACKS);
 	for (UINT uID = IDS_TRACK_TITLE_S3; uID <= IDS_TRACK_STAFF_SK; uID++) {
-		SendMessage(hComboBox, CB_ADDSTRING, 0, (LPARAM)GetStringFromTable(hInstance, uID));
+		LPTSTR pText = GetStringFromTable(hInstance, uID);
+		SendMessage(hComboBox, CB_ADDSTRING, 0, (LPARAM)pText);
+		LocalFree(pText);
 	}
 
 	HWND hSlider = GetDlgItem(hDlg, IDC_SLIDER_TEMPO);
@@ -243,10 +245,12 @@ BOOL CreateMainWindow(HINSTANCE hInstance, HWND *hWnd, HWND *hDlg) {
 	if (!RegisterClass(&wc))
 		return FALSE;
 
-	*hWnd = CreateWindow(TEXT("SoundTest"), GetStringFromTable(hInstance, IDS_TITLE),
+	LPTSTR pTitle = GetStringFromTable(hInstance, IDS_TITLE);
+	*hWnd = CreateWindow(TEXT("SoundTest"), pTitle,
 		(WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX),
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 		(HWND)NULL, (HMENU)NULL, hInstance, (LPVOID)NULL);
+	LocalFree(pTitle);
 	if (!*hWnd)
 		return FALSE;
 

@@ -1,14 +1,32 @@
 #include "WinMsg.h"
 
-LPCTSTR GetStringFromTable(HINSTANCE hInstance, UINT uID) {
-#ifdef __MINGW32__
-	static TCHAR pBuffer[256];
-	LoadString(hInstance, uID, pBuffer, 256*sizeof(TCHAR));
-#else
-	LPCTSTR pBuffer = NULL;
-	LoadString(hInstance, uID, (LPTSTR)&pBuffer, 0);
-#endif
-	return pBuffer;
+LPTSTR GetStringFromTable(HINSTANCE hInstance, UINT uID) {
+	TCHAR pLocalBuffer[256];
+	LPTSTR pBuffer = NULL;
+	LPTSTR pCopy;
+	int len;
+
+	len = LoadString(hInstance, uID, (LPTSTR)&pBuffer, 0);
+	if (len <= 0) {
+		/* Calling LoadString with cchBufferMax == 0 doesn't always work properly when
+		 * using the ANSI APIs, so a fixed size buffer is used as a fallback.
+		 */
+		len = LoadString(hInstance, uID, pLocalBuffer, sizeof(pLocalBuffer));
+		if (len <= 0) {
+			return NULL;
+		}
+		pBuffer = pLocalBuffer;
+	}
+
+	pCopy = (LPTSTR)LocalAlloc(LMEM_FIXED, (len + 1) * sizeof(TCHAR));
+	if (!pCopy) {
+		return NULL;
+	}
+
+	CopyMemory(pCopy, pBuffer, len * sizeof(TCHAR));
+	pCopy[len] = 0;
+
+	return pCopy;
 }
 
 LPTSTR GetErrorMessage(DWORD dwMessageId, DWORD dwLanguageId) {
@@ -34,19 +52,28 @@ LPTSTR GetFormattedMessage(LPCTSTR pMessage, ...) {
 	return pBuffer;
 }
 
-int MessageBoxFromTable(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance) {
-	return MessageBox(hWnd, GetStringFromTable(hInstance, uTextID), GetStringFromTable(hInstance, uCaptionID), uType);
+void MessageBoxFromTable(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance) {
+	LPTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
+	LPTSTR lpCaption = GetStringFromTable(hInstance, uCaptionID);
+
+	MessageBox(hWnd, lpMessage, lpCaption, uType);
+
+	LocalFree(lpMessage);
+	LocalFree(lpCaption);
 }
 
 DWORD MessageBoxFromTableWithError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance) {
 	DWORD dw = GetLastError();
 
-	LPCTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
+	LPTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
+	LPTSTR lpCaption = GetStringFromTable(hInstance, uCaptionID);
 	LPTSTR lpMsgBuf = GetErrorMessage(dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT));
 	LPTSTR lpDisplayBuf = GetFormattedMessage(TEXT("%1: %2"), lpMessage, lpMsgBuf);
 
-	MessageBox(hWnd, lpDisplayBuf, GetStringFromTable(hInstance, uCaptionID), uType);
+	MessageBox(hWnd, lpDisplayBuf, lpCaption, uType);
 
+	LocalFree(lpMessage);
+	LocalFree(lpCaption);
 	LocalFree(lpMsgBuf);
 	LocalFree(lpDisplayBuf);
 
@@ -56,12 +83,15 @@ DWORD MessageBoxFromTableWithError(HWND hWnd, UINT uTextID, UINT uCaptionID, UIN
 DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance) {
 	DWORD dw = CommDlgExtendedError();
 
-	LPCTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
+	LPTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
+	LPTSTR lpCaption = GetStringFromTable(hInstance, uCaptionID);
 	LPCTSTR lpErrorString = GetCommDlgErrorMessage(dw);
 	LPTSTR lpDisplayBuf = GetFormattedMessage(TEXT("%1: %2"), lpMessage, lpErrorString);
 
-	MessageBox(hWnd, lpDisplayBuf, GetStringFromTable(hInstance, uCaptionID), uType);
+	MessageBox(hWnd, lpDisplayBuf, lpCaption, uType);
 
+	LocalFree(lpMessage);
+	LocalFree(lpCaption);
 	LocalFree(lpDisplayBuf);
 
 	return dw;
