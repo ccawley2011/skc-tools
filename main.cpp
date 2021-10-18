@@ -229,18 +229,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		HWND hDlg = (HWND)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 		return CommandEvent(hDlg, uMsg, wParam, lParam);
 	}
-
-	case WM_ERASEBKGND: {
-		HBRUSH hbr = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
-		HDC hdc = (HDC)wParam;
-		RECT rc;
-		GetClientRect(hwnd, &rc);
-		SetMapMode(hdc, MM_ANISOTROPIC);
-		SetWindowExtEx(hdc, 100, 100, NULL);
-		SetViewportExtEx(hdc, rc.right, rc.bottom, NULL);
-		FillRect(hdc, &rc, hbr);
-		return 0;
-	}
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -252,7 +240,6 @@ BOOL CreateMainWindow(HINSTANCE hInstance, HWND *hWnd, HWND *hDlg) {
 	wc.hInstance = hInstance;
 	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wc.lpszClassName = TEXT("SoundTest");
-	wc.hbrBackground = CreateSolidBrush(RGB(255, 0, 0));
 	if (!RegisterClass(&wc))
 		return FALSE;
 
