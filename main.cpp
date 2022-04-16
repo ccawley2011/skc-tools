@@ -52,7 +52,7 @@ void SetButtonState(HWND hDlg, BOOL play, BOOL pause, BOOL resume, BOOL stop, BO
 	EnableWindow(GetDlgItem(hDlg, IDC_SLIDER_TEMPO), tempo);
 }
 
-INT_PTR InitDialogEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+INT_PTR InitDialogEvent(HWND hDlg) {
 	HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE);
 	HWND hComboBox = GetDlgItem(hDlg, IDC_COMBO_TRACKS);
 	for (UINT uID = IDS_TRACK_TITLE_S3; uID <= IDS_TRACK_STAFF_SK; uID++) {
@@ -70,7 +70,7 @@ INT_PTR InitDialogEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return FALSE;
 }
 
-INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+INT_PTR CommandEvent(HWND hDlg, WPARAM wParam, LPARAM lParam) {
 	HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE);
 	MidiDLL *dll = (MidiDLL*)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
@@ -163,7 +163,7 @@ INT_PTR CommandEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	return FALSE;
 }
 
-INT_PTR HScrollEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+INT_PTR HScrollEvent(HWND hDlg, WPARAM wParam, LPARAM lParam) {
 	MidiDLL *dll = (MidiDLL*)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 	int pct = 100;
@@ -197,13 +197,13 @@ INT_PTR HScrollEvent(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 INT_PTR CALLBACK DialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	switch (uMsg) {
 	case WM_INITDIALOG:
-		return InitDialogEvent(hDlg, uMsg, wParam, lParam);
+		return InitDialogEvent(hDlg);
 
 	case WM_COMMAND:
-		return CommandEvent(hDlg, uMsg, wParam, lParam);
+		return CommandEvent(hDlg, wParam, lParam);
 
 	case WM_HSCROLL:
-		return HScrollEvent(hDlg, uMsg, wParam, lParam);
+		return HScrollEvent(hDlg, wParam, lParam);
 
 	case WM_USER_MIDIEND:
 		SetButtonState(hDlg, TRUE, FALSE, FALSE, FALSE, TRUE);
@@ -229,7 +229,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 	case WM_COMMAND: {
 		HWND hDlg = (HWND)GetWindowLongPtr(hwnd, GWLP_USERDATA);
-		return CommandEvent(hDlg, uMsg, wParam, lParam);
+		return CommandEvent(hDlg, wParam, lParam);
 	}
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -276,6 +276,8 @@ BOOL CreateMainWindow(HINSTANCE hInstance, HWND *hWnd, HWND *hDlg) {
 }
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd) {
+	(void)hPrevInstance;
+
 	HWND hWnd, hDlg;
 	if (!CreateMainWindow(hInstance, &hWnd, &hDlg))
 		return MessageBoxFromTableWithError(hDlg, IDS_INIT_ERROR, IDS_TITLE, MB_ICONERROR, hInstance);
