@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         platform:
-        - { name: Windows (MSVC),      os: windows-latest, shell: pwsh, flags: -A Win32 -T v141_xp }
+        - { name: Windows (MSVC),      os: windows-latest, shell: pwsh, flags: -A Win32 }
         - { name: Windows (MinGW-w64), os: windows-latest, shell: 'msys2 {0}' }
         - { name: Linux,               os: ubuntu-latest,  shell: sh }
         - { name: MacOS,               os: macos-latest,   shell: sh }
