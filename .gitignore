@@ -1,2 +1,10 @@
 /build*
 *.aps
+
+skc2smf
+*.exe
+*.obj
+*.res
+*.lnk
+*.map
+*.err

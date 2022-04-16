@@ -86,20 +86,31 @@ enum {
 	TRACK_LAST = TRACK_STAFF_SK
 };
 
+#ifdef __WATCOMC__
+#pragma aux my_thiscall "_*" \
+        __parm __routine [ecx] \
+        __value __struct __struct __caller [] \
+        __modify [eax ecx edx];
+
+#define THISCALL __declspec(__pragma("my_thiscall"))
+#else
+#define THISCALL
+#endif
+
 class MidiInterface {
 public:
 	MidiInterface(HMODULE moduleHandle);
 	~MidiInterface();
 
-	virtual BOOL init(HWND hwnd) = 0;
-	virtual BOOL loadSong(short id, unsigned int bgmmode) = 0;
-	virtual BOOL playSong() = 0;
-	virtual BOOL stopSong() = 0;
-	virtual BOOL pauseSong() = 0;
-	virtual BOOL resumeSong() = 0;
-	virtual BOOL setTempo(unsigned int pct) = 0;
+	virtual THISCALL BOOL init(HWND hwnd) = 0;
+	virtual THISCALL BOOL loadSong(short id, unsigned int bgmmode) = 0;
+	virtual THISCALL BOOL playSong() = 0;
+	virtual THISCALL BOOL stopSong() = 0;
+	virtual THISCALL BOOL pauseSong() = 0;
+	virtual THISCALL BOOL resumeSong() = 0;
+	virtual THISCALL BOOL setTempo(unsigned int pct) = 0;
 };
 
-typedef MidiInterface *(*GetMidiInterfaceFunc)();
+typedef MidiInterface *(__stdcall *GetMidiInterfaceFunc)();
 
 #endif
