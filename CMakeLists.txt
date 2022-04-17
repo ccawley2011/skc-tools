@@ -1,10 +1,20 @@
 cmake_minimum_required(VERSION 3.4)
 project(skc-tools LANGUAGES C)
 
+if (UNIX)
+	include(GNUInstallDirs)
+else ()
+	set(CMAKE_INSTALL_BINDIR .)
+	set(CMAKE_INSTALL_DOCDIR .)
+	set(CPACK_GENERATOR "ZIP")
+endif ()
+
 add_executable(skc2smf
 	skc2smf.c
 	Convert.c
 	Convert.h)
+
+install(TARGETS skc2smf DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 if (WIN32)
 	enable_language(CXX RC)
@@ -21,6 +31,8 @@ if (WIN32)
 		resource.rc
 		resource.h)
 
+	install(TARGETS skc-music-player DESTINATION ${CMAKE_INSTALL_BINDIR})
+
 	if (MSVC)
 		target_compile_definitions(skc2smf PRIVATE _UNICODE _CRT_SECURE_NO_DEPRECATE)
 		target_compile_definitions(skc-music-player PRIVATE _UNICODE)
@@ -30,3 +42,8 @@ if (WIN32)
 		target_link_options(skc-music-player PRIVATE -static-libgcc)
 	endif ()
 endif ()
+
+install(FILES README.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
+install(DIRECTORY img/ DESTINATION ${CMAKE_INSTALL_DOCDIR}/img/)
+
+include(CPack)
