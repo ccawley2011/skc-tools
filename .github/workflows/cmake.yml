@@ -17,18 +17,19 @@ jobs:
     strategy:
       matrix:
         platform:
-        - { name: Windows (MSVC),      os: windows-latest, shell: pwsh, flags: -A Win32 }
-        - { name: Windows (MinGW-w64), os: windows-latest, shell: 'msys2 {0}' }
-        - { name: Linux,               os: ubuntu-latest,  shell: sh }
-        - { name: MacOS,               os: macos-latest,   shell: sh }
+        - { name: Windows (MSVC),              os: windows-latest, shell: pwsh, flags: -A Win32 }
+        - { name: Windows (MinGW-w64 + GCC),   os: windows-latest, shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686 }
+        - { name: Windows (MinGW-w64 + Clang), os: windows-latest, shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686 }
+        - { name: Linux,                       os: ubuntu-latest,  shell: sh }
+        - { name: MacOS,                       os: macos-latest,   shell: sh }
 
     steps:
     - name: Set up MSYS2
       if: matrix.platform.shell == 'msys2 {0}'
       uses: msys2/setup-msys2@v2
       with:
-        msystem: MINGW32
-        install: mingw-w64-i686-gcc mingw-w64-i686-cmake mingw-w64-i686-ninja
+        msystem: ${{matrix.platform.msystem}}
+        install: ${{matrix.platform.msys-env}}-cc ${{matrix.platform.msys-env}}-cmake ${{matrix.platform.msys-env}}-ninja
 
     - uses: actions/checkout@v2
 
