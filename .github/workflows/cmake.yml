@@ -17,11 +17,11 @@ jobs:
     strategy:
       matrix:
         platform:
-        - { name: Windows (MSVC),              os: windows-latest, shell: pwsh, flags: -A Win32 }
-        - { name: Windows (MinGW-w64 + GCC),   os: windows-latest, shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686 }
-        - { name: Windows (MinGW-w64 + Clang), os: windows-latest, shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686 }
-        - { name: Linux,                       os: ubuntu-latest,  shell: sh }
-        - { name: MacOS,                       os: macos-latest,   shell: sh }
+        - { name: Windows (MSVC),              os: windows-latest, shell: pwsh, flags: -A Win32, artifact-suffix: windows-msvc }
+        - { name: Windows (MinGW-w64 + GCC),   os: windows-latest, shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686, artifact-suffix: windows-mingw }
+        - { name: Windows (MinGW-w64 + Clang), os: windows-latest, shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686, artifact-suffix: windows-mingw-clang }
+        - { name: Linux,                       os: ubuntu-latest,  shell: sh, artifact-suffix: linux }
+        - { name: MacOS,                       os: macos-latest,   shell: sh, artifact-suffix: macos }
 
     steps:
     - name: Set up MSYS2
@@ -34,7 +34,16 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Configure CMake
-      run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{matrix.platform.flags}}
+      run: cmake -B build -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{matrix.platform.flags}}
 
     - name: Build
       run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Install
+      run: cmake --build build --config ${{env.BUILD_TYPE}} --target install
+
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: skc-tools-${{matrix.platform.artifact-suffix}}
+        path: install/*
