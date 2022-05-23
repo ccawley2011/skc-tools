@@ -1,5 +1,9 @@
 #include "WinMsg.h"
 
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(a) (sizeof(a) / sizeof((a)[0]))
+#endif
+
 LPTSTR GetStringFromTable(HINSTANCE hInstance, UINT uID) {
 	TCHAR pLocalBuffer[256];
 	LPTSTR pBuffer = NULL;
@@ -11,7 +15,7 @@ LPTSTR GetStringFromTable(HINSTANCE hInstance, UINT uID) {
 		/* Calling LoadString with cchBufferMax == 0 doesn't always work properly when
 		 * using the ANSI APIs, so a fixed size buffer is used as a fallback.
 		 */
-		len = LoadString(hInstance, uID, pLocalBuffer, sizeof(pLocalBuffer));
+		len = LoadString(hInstance, uID, pLocalBuffer, ARRAYSIZE(pLocalBuffer));
 		if (len <= 0) {
 			return NULL;
 		}
