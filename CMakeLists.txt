@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.0.2)
 project(skc-tools LANGUAGES C)
 
 if (UNIX)
