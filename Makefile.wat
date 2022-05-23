@@ -56,7 +56,7 @@ $(PLAYER_LNK) : Makefile.wat
 
 !endif
 
-all: $(SMC2SMF_EXE)
+all: .symbolic $(SMC2SMF_EXE)
 
 $(SMC2SMF_EXE) : $(SMC2SMF_LNK) $(SMC2SMF_OBJS)
     wlink @$[@
@@ -86,7 +86,17 @@ $(SMC2SMF_LNK) : Makefile.wat
 .rc.res :
     wrc $(RCFLAGS) -fo=$@ $[*
 
+package: .symbolic all
+    mkdir -p package/img/
+    copy img/player-screenshot.png package/img/
+    copy README.md package/
+    copy $(SMC2SMF_EXE) package/
+!ifeq system nt
+    copy $(PLAYER_EXE) package/
+!endif
+
 clean: .symbolic
+    rm -rf package/
     rm -f $(PLAYER_EXE) $(SMC2SMF_EXE)
     rm -f $(PLAYER_LNK) $(SMC2SMF_LNK)
     rm -f $(PLAYER_OBJS) $(SMC2SMF_OBJS)
