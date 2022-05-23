@@ -18,7 +18,7 @@ RCFLAGS += -bt=$(system) -I"$(%WATCOM)/h/nt"
 
 !else ifeq system linux
 CFLAGS += -bt=$(system) -I"$(%WATCOM)/lh"
-EXEEXT =
+!undef EXEEXT
 
 !else ifeq system dos
 CFLAGS += -bt=$(system) -I"$(%WATCOM)/h"
@@ -67,6 +67,9 @@ $(SMC2SMF_LNK) : Makefile.wat
     @%append $@ name skc2smf
     @%append $@ op map, quiet
     @%append $@ system $(system)
+!ifndef EXEEXT
+    @%append $@ op noext
+!endif
     @for %i in ($(SMC2SMF_OBJS)) do @%append $@ file %i
 
 .EXTENSIONS:
