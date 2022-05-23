@@ -30,6 +30,7 @@ if (WIN32)
 		WinMsg.h
 		resource.rc
 		resource.h)
+	target_link_libraries(skc-music-player PRIVATE comctl32)
 
 	install(TARGETS skc-music-player DESTINATION ${CMAKE_INSTALL_BINDIR})
 
