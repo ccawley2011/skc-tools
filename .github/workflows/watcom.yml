@@ -1,0 +1,35 @@
+name: OpenWatcom
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: ${{matrix.platform.name}}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform:
+        - { name: Windows, system: nt,    artifact-suffix: windows   }
+        - { name: Linux,   system: linux, artifact-suffix: linux-x86 }
+        - { name: DOS,     system: dos,   artifact-suffix: dos       }
+
+    steps:
+    - name: Set up OpenWatcom
+      uses: open-watcom/setup-watcom@v0
+      with:
+        tag: 2021-12-01-Build
+
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: wmake -f Makefile.wat system=${{matrix.platform.system}}
+
+    - name: Package
+      run: wmake -f Makefile.wat system=${{matrix.platform.system}} package
+
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: skc-tools-${{matrix.platform.artifact-suffix}}
+        path: package/*

@@ -20,7 +20,7 @@ jobs:
         - { name: Windows (MSVC),              os: windows-latest, shell: pwsh, flags: -A Win32, artifact-suffix: windows-msvc }
         - { name: Windows (MinGW-w64 + GCC),   os: windows-latest, shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686, artifact-suffix: windows-mingw }
         - { name: Windows (MinGW-w64 + Clang), os: windows-latest, shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686, artifact-suffix: windows-mingw-clang }
-        - { name: Linux,                       os: ubuntu-latest,  shell: sh, artifact-suffix: linux }
+        - { name: Linux,                       os: ubuntu-latest,  shell: sh, artifact-suffix: linux-x64 }
         - { name: MacOS,                       os: macos-latest,   shell: sh, artifact-suffix: macos }
 
     steps:
