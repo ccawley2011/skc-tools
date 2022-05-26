@@ -57,9 +57,9 @@ static size_t WriteMIDIValue(unsigned char *FileData, size_t Pos, unsigned long 
 }
 
 
-size_t DecompressData(const void *src, size_t srcSize, void *dst) {
+size_t DecompressData(const void *src, size_t srcSize, void *dst, void *wspace) {
 	unsigned long CmpSize, BinSize;
-	unsigned char DecmprBuf[0x1000];
+	unsigned char *DecmprBuf = wspace;
 	unsigned int DecmprOfs1;
 	unsigned int DecmprOfs2;
 	unsigned int dwCmd;

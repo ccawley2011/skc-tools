@@ -48,7 +48,7 @@ static size_t fsize(FILE *fp) {
 
 int _tmain(int argc, TCHAR **argv) {
 	FILE *ifp, *ofp;
-	void *in, *decmp, *out;
+	void *in, *decmp, *out, *wspace;
 	size_t isize, dsize, osize;
 	const TCHAR *infile = NULL, *outfile = NULL;
 	int loopCtrl = 0, totalLoopCnt = 2;
@@ -64,7 +64,7 @@ int _tmain(int argc, TCHAR **argv) {
 	ifp = _tfopen(infile, _T("rb"));
 	if (ifp) {
 		isize = fsize(ifp);
-		in = malloc(isize);
+		in = malloc(isize + DECOMPRESS_WORKSPACE);
 		if (!in) {
 			_ftprintf(stderr, _T("Out of memory\n"));
 			fclose(ifp);
@@ -78,19 +78,21 @@ int _tmain(int argc, TCHAR **argv) {
 		}
 
 		fclose(ifp);
+
+		wspace = (unsigned char *)in + isize;
 	} else {
 		_ftprintf(stderr, _T("Failed to open %s for reading: %s\n"), infile, _tcserror(errno));
 		return EXIT_FAILURE;
 	}
 
-	dsize = DecompressData(in, isize, NULL);
+	dsize = DecompressData(in, isize, NULL, wspace);
 	decmp = malloc(dsize);
 	if (!decmp) {
 		_ftprintf(stderr, _T("Out of memory\n"));
 		free(in);
 		return EXIT_FAILURE;
 	}
-	dsize = DecompressData(in, isize, decmp);
+	dsize = DecompressData(in, isize, decmp, wspace);
 	free(in);
 
 	osize = BIN2MID(decmp, dsize, NULL, loopCtrl, totalLoopCnt);

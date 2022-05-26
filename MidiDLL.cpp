@@ -177,11 +177,12 @@ BOOL MidiDLL::save(HANDLE hFile, int loopCtrl, int totalLoopCnt) {
 }
 
 BOOL MidiDLL::DecompressData(const void* src, size_t srcSize, void*& dst, size_t& dstSize) {
-	dstSize = ::DecompressData(src, srcSize, NULL);
+	unsigned char wspace[DECOMPRESS_WORKSPACE];
+	dstSize = ::DecompressData(src, srcSize, NULL, wspace);
 	dst = HeapAlloc(GetProcessHeap(), 0, dstSize);
 	if (!dst)
 		return FALSE;
-	dstSize = ::DecompressData(src, srcSize, dst);
+	dstSize = ::DecompressData(src, srcSize, dst, wspace);
 	return TRUE;
 }
 
