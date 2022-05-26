@@ -278,10 +278,7 @@ BOOL CreateMainWindow(HINSTANCE hInstance, HWND *hWnd, HWND *hDlg) {
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nShowCmd) {
 	(void)hPrevInstance;
 
-	INITCOMMONCONTROLSEX icc;
-	icc.dwSize = sizeof(icc);
-	icc.dwICC = ICC_BAR_CLASSES;
-	InitCommonControlsEx(&icc);
+	InitCommonControls();
 
 	HWND hWnd, hDlg;
 	if (!CreateMainWindow(hInstance, &hWnd, &hDlg))
