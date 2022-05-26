@@ -21,7 +21,7 @@ CFLAGS += -bt=$(system) -I"$(%WATCOM)/lh"
 !undef EXEEXT
 
 !else ifeq system dos
-CFLAGS += -bt=$(system) -I"$(%WATCOM)/h"
+CFLAGS += -bt=$(system) -I"$(%WATCOM)/h" -mc
 CC = wcc
 
 !else
