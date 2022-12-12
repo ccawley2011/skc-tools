@@ -15,7 +15,7 @@ LPTSTR GetFormattedMessageV(LPCTSTR pMessage, va_list args);
 LPTSTR GetFormattedMessage(LPCTSTR pMessage, ...);
 void MessageBoxFromTable(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance);
 DWORD MessageBoxFromTableWithError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance);
-DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance);
+DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance, DWORD dwError);
 LPCTSTR GetCommDlgErrorMessage(DWORD dwError);
 
 #ifdef __cplusplus

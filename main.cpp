@@ -150,7 +150,7 @@ INT_PTR CommandEvent(HWND hDlg, WPARAM wParam, LPARAM lParam) {
 		if (!OpenFileDialog(hDlg, fileName, sizeof(fileName), TEXT("Standard MIDI File (*.mid)\0*.mid\0"), TEXT("mid"), TRUE)) {
 			DWORD error = CommDlgExtendedError();
 			if (error != 0) {
-				MessageBoxFromTableWithCommDlgError(hDlg, IDS_SFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance);
+				MessageBoxFromTableWithCommDlgError(hDlg, IDS_SFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance, error);
 			}
 		} else {
 			if (!dll->save(fileName))
@@ -297,7 +297,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 		if (!OpenFileDialog(hDlg, dllName, sizeof(dllName), TEXT("Dynamic Link Library (*.dll)\0*.dll\0"), TEXT("dll"), FALSE)) {
 			DWORD error = CommDlgExtendedError();
 			if (error != 0) {
-				return MessageBoxFromTableWithCommDlgError(hDlg, IDS_OFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance);
+				return MessageBoxFromTableWithCommDlgError(hDlg, IDS_OFN_DIALOG_FAILED, IDS_TITLE, MB_ICONERROR, hInstance, error);
 			}
 			return 0;
 		}

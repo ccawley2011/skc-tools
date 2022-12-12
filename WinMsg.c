@@ -84,12 +84,10 @@ DWORD MessageBoxFromTableWithError(HWND hWnd, UINT uTextID, UINT uCaptionID, UIN
 	return dw;
 }
 
-DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance) {
-	DWORD dw = CommDlgExtendedError();
-
+DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaptionID, UINT uType, HINSTANCE hInstance, DWORD dwError) {
 	LPTSTR lpMessage = GetStringFromTable(hInstance, uTextID);
 	LPTSTR lpCaption = GetStringFromTable(hInstance, uCaptionID);
-	LPCTSTR lpErrorString = GetCommDlgErrorMessage(dw);
+	LPCTSTR lpErrorString = GetCommDlgErrorMessage(dwError);
 	LPTSTR lpDisplayBuf = GetFormattedMessage(TEXT("%1: %2"), lpMessage, lpErrorString);
 
 	MessageBox(hWnd, lpDisplayBuf, lpCaption, uType);
@@ -98,7 +96,7 @@ DWORD MessageBoxFromTableWithCommDlgError(HWND hWnd, UINT uTextID, UINT uCaption
 	LocalFree(lpCaption);
 	LocalFree(lpDisplayBuf);
 
-	return dw;
+	return dwError;
 }
 
 LPCTSTR GetCommDlgErrorMessage(DWORD dwError) {
