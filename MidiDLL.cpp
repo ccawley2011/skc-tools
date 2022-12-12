@@ -171,7 +171,7 @@ BOOL MidiDLL::save(HANDLE hFile, int loopCtrl, int totalLoopCnt) {
 	if (!bErrorFlag)
 		return FALSE;
 
-	bErrorFlag = WriteFile(hFile, out, osize);
+	bErrorFlag = WriteFile(hFile, out, (DWORD)osize);
 	HeapFree(GetProcessHeap(), 0, out);
 	return bErrorFlag;
 }

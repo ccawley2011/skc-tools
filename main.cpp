@@ -111,7 +111,7 @@ INT_PTR CommandEvent(HWND hDlg, WPARAM wParam, LPARAM lParam) {
 		if (HIWORD(wParam) != CBN_SELCHANGE)
 			break;
 
-		int index = SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0);
+		int index = (int)SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0);
 		if (index != CB_ERR && !dll->setTrack(index + 1)) {
 			MessageBoxFromTable(hDlg, IDS_PLAY_FAILED, IDS_TITLE, MB_ICONWARNING, hInstance);
 		}
@@ -177,7 +177,7 @@ INT_PTR HScrollEvent(HWND hDlg, WPARAM wParam, LPARAM lParam) {
 	case TB_LINEDOWN:
 	case TB_TOP:
 	case TB_BOTTOM:
-		pct = SendMessage((HWND)lParam, TBM_GETPOS, 0, 0);
+		pct = (int)SendMessage((HWND)lParam, TBM_GETPOS, 0, 0);
 		break;
 	default:
 		return FALSE;
