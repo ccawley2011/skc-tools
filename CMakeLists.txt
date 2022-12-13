@@ -1,5 +1,16 @@
 cmake_minimum_required(VERSION 3.0.2)
+if (POLICY CMP0136)
+	cmake_policy(SET CMP0136 NEW)
+endif ()
 project(skc-tools LANGUAGES C)
+
+if (WATCOM)
+	set(CMAKE_WATCOM_RUNTIME_LIBRARY SingleThreaded)
+
+	if (CMAKE_SYSTEM_PROCESSOR STREQUAL "I86")
+		add_compile_options(-mc)
+	endif ()
+endif ()
 
 if (UNIX)
 	include(GNUInstallDirs)
@@ -16,7 +27,8 @@ add_executable(skc2smf
 
 install(TARGETS skc2smf DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-if (WIN32)
+# TODO: Fix resource compilation with OpenWatcom
+if (WIN32 AND NOT WATCOM)
 	enable_language(CXX RC)
 
 	add_executable(skc-music-player WIN32
