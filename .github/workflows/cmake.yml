@@ -20,7 +20,6 @@ jobs:
         - { name: Windows (MSVC),              os: windows-latest, shell: pwsh, flags: -A Win32, artifact-suffix: windows-msvc }
         - { name: Windows (MSVC + Clang),      os: windows-latest, shell: pwsh, flags: -A Win32  -T ClangCL, artifact-suffix: windows-msvc-clang }
         - { name: Windows (MinGW-w64 + GCC),   os: windows-latest, shell: 'msys2 {0}', msystem: mingw32, msys-env: mingw-w64-i686, artifact-suffix: windows-mingw }
-        - { name: Windows (MinGW-w64 + Clang), os: windows-latest, shell: 'msys2 {0}', msystem: clang32, msys-env: mingw-w64-clang-i686, artifact-suffix: windows-mingw-clang }
         - { name: Linux,                       os: ubuntu-latest,  shell: sh, artifact-suffix: linux-x64 }
         - { name: MacOS,                       os: macos-latest,   shell: sh, artifact-suffix: macos }
 
@@ -31,8 +30,9 @@ jobs:
       with:
         msystem: ${{matrix.platform.msystem}}
         install: ${{matrix.platform.msys-env}}-cc ${{matrix.platform.msys-env}}-cmake ${{matrix.platform.msys-env}}-ninja
+        suppress-deprecation-warnings: msystem-mingw32
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
     - name: Configure CMake
       run: cmake -B build -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{matrix.platform.flags}}
@@ -44,7 +44,7 @@ jobs:
       run: cmake --build build --config ${{env.BUILD_TYPE}} --target install
 
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v7
       with:
         name: skc-tools-${{matrix.platform.artifact-suffix}}
         path: install/*
